@@ -22,7 +22,7 @@ from face2face.core.modules.utils.utils import encode_path_safe
 from face2face.core.modules.utils.utils import load_image
 
 class _FaceEmbedding:
-    def load_face(self: Face2Face, face_name: str) -> Union[List[Face], None]:
+    def load_face(self: Face2Face, face_name: str):
         """
         Load a reference face embedding from a file.
         :param face_name: the name of the reference face embedding
@@ -48,7 +48,7 @@ class _FaceEmbedding:
         self._face_embeddings[face_name] = embedding
         return embedding
 
-    def load_faces(self, face_names: Union[str, List[str], List[Face], None] = None) -> dict:
+    def load_faces(self, face_names: Union[str, List[str], List[Face], None] = None):
         """
         :param face_names: the faces to load from the _face_embeddings folder.
             If None all stored face_embeddings are loaded and returned.
@@ -82,9 +82,9 @@ class _FaceEmbedding:
     def add_face(
             self: Face2Face,
             face_name: str,
-            image: Union[np.array, str, ImageFile],
+            image: np.array, str, ImageFile,
             save: bool = False
-    ) -> Tuple[str, np.array]:
+    ):
         """
         Add a reference face to the face swapper. The face swapper will use this face to swap it to other images.
         Use the method swap_from_reference_face to swap the reference face to other images.

@@ -17,7 +17,7 @@ def create_static_box_mask(
         crop_size: Size,
         face_mask_blur: float,
         face_mask_padding: Tuple[int, int, int, int]
-) -> np.array:
+):
     blur_amount = int(crop_size[0] * 0.5 * face_mask_blur)
     blur_area = max(blur_amount // 2, 1)
     box_mask = np.ones(crop_size, np.float32)
@@ -30,7 +30,7 @@ def create_static_box_mask(
     return box_mask
 
 
-def prepare_crop_frame(crop_vision_frame: np.array) -> np.array:
+def prepare_crop_frame(crop_vision_frame: np.array):
     crop_vision_frame = crop_vision_frame[:, :, ::-1] / 255.0
     crop_vision_frame = (crop_vision_frame - 0.5) / 0.5
     crop_vision_frame = np.expand_dims(crop_vision_frame.transpose(2, 0, 1), axis=0).astype(np.float32)
@@ -41,7 +41,7 @@ def estimate_matrix_by_face_landmark_5(
         face_landmark_5: np.array,
         warp_template: str,
         crop_size: Size
-) -> np.array:
+):
     normed_warp_template = WARP_TEMPLATES.get(warp_template) * crop_size
     affine_matrix = cv2.estimateAffinePartial2D(
             face_landmark_5, normed_warp_template, method=cv2.RANSAC, ransacReprojThreshold=100
@@ -54,14 +54,14 @@ def warp_face_by_face_landmark_5(
         face_landmark_5: np.array,
         warp_template: str,  # the ones defined in model templates
         crop_size: Size
-) -> Tuple[np.array, np.array]:
+):
     affine_matrix = estimate_matrix_by_face_landmark_5(face_landmark_5, warp_template, crop_size)
     crop_vision_frame = cv2.warpAffine(temp_vision_frame, affine_matrix, crop_size, borderMode=cv2.BORDER_REPLICATE,
                                        flags=cv2.INTER_AREA)
     return crop_vision_frame, affine_matrix
 
 
-def normalize_crop_frame(crop_vision_frame: np.array) -> np.array:
+def normalize_crop_frame(crop_vision_frame: np.array):
     crop_vision_frame = np.clip(crop_vision_frame, -1, 1)
     crop_vision_frame = (crop_vision_frame + 1) / 2
     crop_vision_frame = crop_vision_frame.transpose(1, 2, 0)
@@ -82,7 +82,7 @@ def get_onnx_inference_session(
     return session
 
 
-def apply_enhance(crop_vision_frame: np.array, model_path: str) -> np.array:
+def apply_enhance(crop_vision_frame: np.array, model_path: str):
     inference_session = get_onnx_inference_session(model_path=model_path)
     frame_processor_inputs = {}
     for frame_processor_input in inference_session.get_inputs():
@@ -103,7 +103,7 @@ def paste_back(
         crop_vision_frame: np.array,
         crop_mask: np.array,
         affine_matrix: np.array
-) -> np.array:
+):
     inverse_matrix = cv2.invertAffineTransform(affine_matrix)
     temp_size = temp_vision_frame.shape[:2][::-1]
     inverse_mask = cv2.warpAffine(crop_mask, inverse_matrix, temp_size).clip(0, 1)
@@ -122,7 +122,7 @@ def blend_frame(
         temp_vision_frame: np.array,
         paste_vision_frame: np.array,
         blend_strength: float = 0.5  # value between 0 and 1
-) -> np.array:
+):
     face_enhancer_blend = 1 - blend_strength
     temp_vision_frame = cv2.addWeighted(
         temp_vision_frame, face_enhancer_blend, paste_vision_frame, 1 - face_enhancer_blend, 0
@@ -134,7 +134,7 @@ def enhance_face(
         target_face: Face,
         temp_vision_frame: np.array,
         model='gfpgan_1.4'
-) -> np.array:
+):
     config = get_model_config(model)
     model_template = config.get('template')
     model_size = config.get('size')

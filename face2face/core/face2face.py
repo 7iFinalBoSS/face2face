@@ -60,7 +60,7 @@ class Face2Face(_ImageSwap, _FaceEmbedding, _FaceRecognition, _Video_Swap, _Face
         faces: Union[str, dict, list, List[Face], Face, None] = None,
         enhance_face_model: Union[str, None] = 'gpen_bfr_512',
         include_audio: bool = True
-    ) -> Union[np.array, list, VideoFile]:
+    ):
         """
         This is a unified function to swap faces in images and videos.
         :param media: the image or video to swap the faces in.
@@ -108,7 +108,7 @@ class Face2Face(_ImageSwap, _FaceEmbedding, _FaceRecognition, _Video_Swap, _Face
 
         raise ValueError(f"Wrong file type {media}. Check input.")
 
-    def detect_faces(self, image: Union[np.array, str, ImageFile]) -> Union[List | None]:
+    def detect_faces(self, image:np.array, str, ImageFile):
         """
         get faces from left to right by order
         """

@@ -11,7 +11,7 @@ from face2face.model_definitions import SWAPPER_MODELS, FACE_ENHANCER_MODELS
 from media_toolkit import ImageFile
 
 
-def load_image(img: Union[str, np.array, ImageFile]):
+def load_image(img: str, np.array, ImageFile):
     try:
         image = ImageFile().from_any(img).to_np_array()
         # convert to cv2 BGR image
@@ -47,7 +47,7 @@ def encode_path_safe(filename: str, allow_unicode=False):
     return re.sub(r'[-\s]+', '-', filename).strip('-_')
 
 
-def get_files_in_dir(path: str, extensions: list | str = None) -> list:
+def get_files_in_dir(path: str, extensions: list | str = None):
     """returns all files in a directory filtered by extension list"""
     if not os.path.isdir(path):
         print(f"{path} is not a directory. Returning empty list")
@@ -79,7 +79,7 @@ def download_file(download_url: str, save_path: str):
     return save_path
 
 
-def download_model(model_name: str) -> str:
+def download_model(model_name: str):
     """
     Download the models specified in the download urls
     :param model_name: name of the model to download. Look into model_definitions.py for available models

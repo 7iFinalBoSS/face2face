@@ -20,7 +20,7 @@ def get_face_analyser(model_path: str, providers, det_size=(320, 320)):
     return face_analyser
 
 
-def load_reference_face_from_file(face_embedding_file_path: str) -> Union[List[Face], None]:
+def load_reference_face_from_file(face_embedding_file_path: str):
     """
     Load a reference face from a file.
     :param face_embedding_file_path: the file path of the reference face
@@ -41,7 +41,7 @@ def load_reference_face_from_file(face_embedding_file_path: str) -> Union[List[F
         print(f"Error loading reference face {face_embedding_file_path}: {e}")
 
 
-def load_reference_faces_from_folder(folder_path: str) -> dict:
+def load_reference_faces_from_folder(folder_path: str):
     """
     Load reference faces from a folder. The folder must contain .npz files with the reference faces.
     The file name will be used as the reference face name.

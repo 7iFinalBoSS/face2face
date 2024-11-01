@@ -1,6 +1,6 @@
 
 
-def create_occlusion_mask(crop_vision_frame: VisionFrame) -> Mask:
+def create_occlusion_mask(crop_vision_frame: VisionFrame):
     face_occluder = get_face_occluder()
     prepare_vision_frame = cv2.resize(crop_vision_frame, face_occluder.get_inputs()[0].shape[1:3][::-1])
     prepare_vision_frame = numpy.expand_dims(prepare_vision_frame, axis=0).astype(numpy.float32) / 255
